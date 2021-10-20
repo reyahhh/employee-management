@@ -41,17 +41,19 @@
                             <td>Last Name</td>
                             <td>Address</td>
                             <td>Department</td>
+                            <td>Manage</td>
                         </tr>
                     </thead>
                     <tbody>
-                            <tr>
-                                <th scope="row"></th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr v-for="employee in employees" :key="employee.id">
+                                <th scope="row">#{{ employee.id }}</th>
+                                <td>{{ employee.first_name }}</td>
+                                 <td>{{ employee.last_name }}</td>
+                                 <td>{{ employee.address }}</td>
+                                  <td>{{ employee.department.name }}</td>
                                 <td>
-                                    <router-link :to="{name: 'EmployeesEdit'}" class="btn btn-success"><i class="far fa-edit"></i> Edit</router-link>
+                                    <router-link :to="{name: 'EmployeesEdit', params:{id: employee.id}}" class="btn btn-success"><i class="far fa-edit"></i> Edit</router-link>
+                                    <button class="btn btn-danger" @click="deleteEmployee(employee.id)">Delete</button>
                                 </td>
                             </tr>
                     </tbody>
@@ -65,7 +67,30 @@
 
 <script>
 export default{
-
+    data(){
+        return {
+            employees: []
+        }
+    },
+    created(){
+        this.getEmployees();
+    },
+    methods: {
+        getEmployees(){
+            axios.get('/api/employees')
+            .then(res => {
+                this.employees = res.data.data
+            }).catch(error => {
+                console.log(error)
+            });
+        },
+        deleteEmployee(id)
+        {   
+            axios.delete('api/employees/'+id).then(res => {
+                console.log(res);
+            })
+        }
+    }
 }
 </script>
 
