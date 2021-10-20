@@ -8,20 +8,19 @@
 <div class="row justify-content-center">
     <div class="col-md-12">
         <div class="col p-0">
-            <div>
-                <div class="alert alert-success">
-                </div>
+            <div v-if="showMessage">
+                <div class="alert alert-success">{{ message }}</div>
             </div>
         </div>
         <div class="card mx-auto">
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <form>
-                            <div class="col">
+                        <form class="row">
+                            <div class="col-6">
                                 <input type="search" id="inline-search" name="search" class="form-control mb-2 mr-sm-2" placeholder="Search Country">
                             </div>
-                            <div class="col">
+                            <div class="col-2">
                                 <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-search"></i> Search</button>
                             </div>
                           </form>
@@ -69,7 +68,9 @@
 export default{
     data(){
         return {
-            employees: []
+            employees: [],
+            showMessage: false,
+            message: ''
         }
     },
     created(){
@@ -87,7 +88,9 @@ export default{
         deleteEmployee(id)
         {   
             axios.delete('api/employees/'+id).then(res => {
-                console.log(res);
+                this.showMessage = true;
+                this.message = res.data;
+                this.getEmployees();
             })
         }
     }

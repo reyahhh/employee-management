@@ -88,6 +88,6 @@ class EmployeeController extends Controller
     {
         $employee->delete();
 
-        return response()->json('Deleted');
+        return response()->json('Employee deleted successfully.');
     }
 }
