@@ -7,7 +7,7 @@
 
 <div class="row justify-content-center">
     <div class="col-md-12 my-4">
-        <form @submit.prevent="storeEmployee">
+        <form @submit.prevent="updateEmployee">
             <div class="form-group row">
                 <label for="first_name" class="col-md-4 col-form-label text-md-right">First name</label>
 
@@ -121,7 +121,7 @@
             <div class="form-group row mb-0">
                 <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-primary">
-                        Add
+                        Update
                     </button>
                 </div>
             </div>
@@ -162,8 +162,20 @@ export default {
   created(){
       this.getCountries();
       this.getDepartments();
+      this.getEmployee();
   },
   methods: {
+      getEmployee(){
+        axios.get('/api/employees/'+ this.$route.params.id)
+          .then(res => {
+              this.form = res.data.data
+              this.getStates();
+              this.getCities();
+
+          }).catch(error => {
+              console.log(console.error())
+          })
+      },
       getCountries(){
           axios.get('/api/employees/countries')
           .then(res => {
@@ -196,8 +208,8 @@ export default {
               console.log(console.error())
           })
       },
-      storeEmployee(){
-          axios  .post("/api/employees", {
+      updateEmployee(){
+          axios  .put("/api/employees/" + this.$route.params.id, {
                     first_name: this.form.first_name,
                     middle_name: this.form.middle_name,
                     last_name: this.form.last_name,

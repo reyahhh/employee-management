@@ -2477,48 +2477,62 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.getCountries();
     this.getDepartments();
+    this.getEmployee();
   },
   methods: {
-    getCountries: function getCountries() {
+    getEmployee: function getEmployee() {
       var _this = this;
 
+      axios.get('/api/employees/' + this.$route.params.id).then(function (res) {
+        _this.form = res.data.data;
+
+        _this.getStates();
+
+        _this.getCities();
+      })["catch"](function (error) {
+        console.log(console.error());
+      });
+    },
+    getCountries: function getCountries() {
+      var _this2 = this;
+
       axios.get('/api/employees/countries').then(function (res) {
-        _this.countries = res.data;
+        _this2.countries = res.data;
       })["catch"](function (error) {
         console.log(console.error());
       });
     },
     getStates: function getStates() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('/api/employees/' + this.form.country_id + '/states').then(function (res) {
-        _this2.states = res.data;
+        _this3.states = res.data;
       })["catch"](function (error) {
         console.log(console.error());
       });
     },
     getCities: function getCities() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get('/api/employees/' + this.form.state_id + '/cities').then(function (res) {
-        _this3.cities = res.data;
+        _this4.cities = res.data;
       })["catch"](function (error) {
         console.log(console.error());
       });
     },
     getDepartments: function getDepartments() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('/api/employees/departments').then(function (res) {
-        _this4.departments = res.data;
+        _this5.departments = res.data;
       })["catch"](function (error) {
         console.log(console.error());
       });
     },
-    storeEmployee: function storeEmployee() {
-      var _this5 = this;
+    updateEmployee: function updateEmployee() {
+      var _this6 = this;
 
-      axios.post("/api/employees", {
+      axios.put("/api/employees/" + this.$route.params.id, {
         first_name: this.form.first_name,
         middle_name: this.form.middle_name,
         last_name: this.form.last_name,
@@ -2531,7 +2545,7 @@ __webpack_require__.r(__webpack_exports__);
         birthdate: this.format_date(this.form.birthdate),
         date_hired: this.format_date(this.form.date_hired)
       }).then(function (res) {
-        _this5.$router.push({
+        _this6.$router.push({
           name: "EmployeesIndex"
         });
       });
@@ -60540,7 +60554,7 @@ var render = function() {
             on: {
               submit: function($event) {
                 $event.preventDefault()
-                return _vm.storeEmployee.apply(null, arguments)
+                return _vm.updateEmployee.apply(null, arguments)
               }
             }
           },
@@ -61154,7 +61168,7 @@ var staticRenderFns = [
         _c(
           "button",
           { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [_vm._v("\n                        Add\n                    ")]
+          [_vm._v("\n                        Update\n                    ")]
         )
       ])
     ])
