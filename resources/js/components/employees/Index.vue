@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="row">
-                            <form class="col-8">
+                            <form @submit.prevent="this.getEmployees()"  class="col-8">
                                 <div class="row">
                                     <div class="col-6">
                                     <input v-model.lazy="search" type="search" id="inline-search" name="search" class="form-control mb-2 mr-sm-2" placeholder="Search">

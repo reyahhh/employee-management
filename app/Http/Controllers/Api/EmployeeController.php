@@ -20,7 +20,7 @@ class EmployeeController extends Controller
     {
         $employees = Employee::all();
         if ($request->search) {
-            $employees = Employee::where("first_name", "like", "%{$request->search}%")->get();
+            $employees = Employee::where("first_name", "like", "%{$request->search}%")->orWhere("last_name", "like", "%{$request->search}%")->get();
         } else if ($request->department_id) {
             $employees = Employee::where('department_id', $request->department_id)->get();
         }

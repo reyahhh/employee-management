@@ -61262,38 +61262,50 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col" }, [
                 _c("div", { staticClass: "row" }, [
-                  _c("form", { staticClass: "col-8" }, [
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-6" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model.lazy",
-                              value: _vm.search,
-                              expression: "search",
-                              modifiers: { lazy: true }
+                  _c(
+                    "form",
+                    {
+                      staticClass: "col-8",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return this.getEmployees()
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-6" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model.lazy",
+                                value: _vm.search,
+                                expression: "search",
+                                modifiers: { lazy: true }
+                              }
+                            ],
+                            staticClass: "form-control mb-2 mr-sm-2",
+                            attrs: {
+                              type: "search",
+                              id: "inline-search",
+                              name: "search",
+                              placeholder: "Search"
+                            },
+                            domProps: { value: _vm.search },
+                            on: {
+                              change: function($event) {
+                                _vm.search = $event.target.value
+                              }
                             }
-                          ],
-                          staticClass: "form-control mb-2 mr-sm-2",
-                          attrs: {
-                            type: "search",
-                            id: "inline-search",
-                            name: "search",
-                            placeholder: "Search"
-                          },
-                          domProps: { value: _vm.search },
-                          on: {
-                            change: function($event) {
-                              _vm.search = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _vm._m(1)
-                    ])
-                  ]),
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(1)
+                      ])
+                    ]
+                  ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-4" }, [
                     _c(
