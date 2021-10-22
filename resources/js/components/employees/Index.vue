@@ -16,15 +16,35 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col">
-                        <form class="row">
-                            <div class="col-6">
-                                <input type="search" id="inline-search" name="search" class="form-control mb-2 mr-sm-2" placeholder="Search Country">
-                            </div>
-                            <div class="col-2">
-                                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-search"></i> Search</button>
-                            </div>
+                        <div class="row">
+                            <form class="col-8">
+                                <div class="row">
+                                    <div class="col-6">
+                                    <input v-model.lazy="search" type="search" id="inline-search" name="search" class="form-control mb-2 mr-sm-2" placeholder="Search">
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-search"></i> Search</button>
+                                </div>
+                                </div>
                           </form>
+                          <div class="col-4">
+                                <select
+                                v-model="selectedDepartment"
+                                name="city"
+                                class="form-control"
+                                aria-label="Default select example"
+                            >
+                                <option
+                                    v-for="department in departments"
+                                    :key="department.id"
+                                    :value="department.id"
+                                    >{{ department.name }}</option
+                                >
+                            </select>
+                          </div>
+                        </div>
                     </div>
+                     
                     <div>
                         <router-link :to="{name: 'EmployeesCreate'}" class="btn btn-primary mb-2"><i class="fas fa-plus"></i> Create</router-link>
                     </div>
@@ -70,20 +90,45 @@ export default{
         return {
             employees: [],
             showMessage: false,
-            message: ''
+            message: '',
+            search: null,
+            selectedDepartment: null,
+            departments: []
+        }
+    },
+    watch: {
+        search(){
+            this.getEmployees();
+        },
+        selectedDepartment(){
+            this.getEmployees();
         }
     },
     created(){
         this.getEmployees();
+        this.getDepartments();
     },
     methods: {
         getEmployees(){
-            axios.get('/api/employees')
+            axios.get('/api/employees', {
+                params: {
+                    search: this.search,
+                    department_id: this.selectedDepartment
+                }
+            })
             .then(res => {
                 this.employees = res.data.data
             }).catch(error => {
                 console.log(error)
             });
+        },
+        getDepartments(){
+             axios.get('/api/employees/departments')
+            .then(res => {
+                this.departments = res.data
+            }).catch(error => {
+                console.log(console.error())
+            })
         },
         deleteEmployee(id)
         {   

@@ -2637,35 +2637,81 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       employees: [],
       showMessage: false,
-      message: ''
+      message: '',
+      search: null,
+      selectedDepartment: null,
+      departments: []
     };
+  },
+  watch: {
+    search: function search() {
+      this.getEmployees();
+    },
+    selectedDepartment: function selectedDepartment() {
+      this.getEmployees();
+    }
   },
   created: function created() {
     this.getEmployees();
+    this.getDepartments();
   },
   methods: {
     getEmployees: function getEmployees() {
       var _this = this;
 
-      axios.get('/api/employees').then(function (res) {
+      axios.get('/api/employees', {
+        params: {
+          search: this.search,
+          department_id: this.selectedDepartment
+        }
+      }).then(function (res) {
         _this.employees = res.data.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    deleteEmployee: function deleteEmployee(id) {
+    getDepartments: function getDepartments() {
       var _this2 = this;
 
-      axios["delete"]('api/employees/' + id).then(function (res) {
-        _this2.showMessage = true;
-        _this2.message = res.data;
+      axios.get('/api/employees/departments').then(function (res) {
+        _this2.departments = res.data;
+      })["catch"](function (error) {
+        console.log(console.error());
+      });
+    },
+    deleteEmployee: function deleteEmployee(id) {
+      var _this3 = this;
 
-        _this2.getEmployees();
+      axios["delete"]('api/employees/' + id).then(function (res) {
+        _this3.showMessage = true;
+        _this3.message = res.data;
+
+        _this3.getEmployees();
       });
     }
   }
@@ -61214,7 +61260,89 @@ var render = function() {
         _c("div", { staticClass: "card mx-auto" }, [
           _c("div", { staticClass: "card-header" }, [
             _c("div", { staticClass: "row" }, [
-              _vm._m(1),
+              _c("div", { staticClass: "col" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("form", { staticClass: "col-8" }, [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-6" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model.lazy",
+                              value: _vm.search,
+                              expression: "search",
+                              modifiers: { lazy: true }
+                            }
+                          ],
+                          staticClass: "form-control mb-2 mr-sm-2",
+                          attrs: {
+                            type: "search",
+                            id: "inline-search",
+                            name: "search",
+                            placeholder: "Search"
+                          },
+                          domProps: { value: _vm.search },
+                          on: {
+                            change: function($event) {
+                              _vm.search = $event.target.value
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(1)
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selectedDepartment,
+                            expression: "selectedDepartment"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          name: "city",
+                          "aria-label": "Default select example"
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selectedDepartment = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      _vm._l(_vm.departments, function(department) {
+                        return _c(
+                          "option",
+                          {
+                            key: department.id,
+                            domProps: { value: department.id }
+                          },
+                          [_vm._v(_vm._s(department.name))]
+                        )
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              ]),
               _vm._v(" "),
               _c(
                 "div",
@@ -61320,28 +61448,12 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col" }, [
-      _c("form", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-6" }, [
-          _c("input", {
-            staticClass: "form-control mb-2 mr-sm-2",
-            attrs: {
-              type: "search",
-              id: "inline-search",
-              name: "search",
-              placeholder: "Search Country"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-2" }, [
-          _c(
-            "button",
-            { staticClass: "btn btn-primary mb-2", attrs: { type: "submit" } },
-            [_c("i", { staticClass: "fas fa-search" }), _vm._v(" Search")]
-          )
-        ])
-      ])
+    return _c("div", { staticClass: "col-4" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary mb-2", attrs: { type: "submit" } },
+        [_c("i", { staticClass: "fas fa-search" }), _vm._v(" Search")]
+      )
     ])
   },
   function() {
